@@ -1,0 +1,25 @@
+{
+  "name": "mental-health-progress-tracker",
+  "version": "1.0.0",
+  "description": "Mental Health Progress Tracker",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/VaidyaHarshal/mental-health-progress-tracker.git"
+  },
+  "keywords": [
+    "react",
+    "javascript",
+    "html",
+    "css"
+  ],
+  "author": "Harshal Vaidya",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/VaidyaHarshal/mental-health-progress-tracker/issues"
+  },
+  "homepage": "https://github.com/VaidyaHarshal/mental-health-progress-tracker#readme"
+}

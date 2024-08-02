@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 
-const DailyLogForm = ({ user }) => {
+const DailyLogForm = ({ user, setLogs }) => {
   const [form, setForm] = useState({
     mood: "",
     anxiety: "",
@@ -17,19 +17,32 @@ const DailyLogForm = ({ user }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(form);
-    console.log(user.uid);
 
     axios
-      .post("http://localhost:5000/api/log", { ...form, uid: user.uid })
+      .post(
+        "http://localhost:5000/api/log",
+        { ...form, uid: user.uid },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      )
       .then((response) => {
-        console.log("Log submitted", response);
+        setLogs((prevLogs) => [...prevLogs, response.data]);
+        setForm({
+          mood: "",
+          anxiety: "",
+          sleep: "",
+          activity: "",
+          interactions: "",
+          symptoms: "",
+        });
       })
       .catch((error) => {
         console.error("Error submitting log", error);
       });
   };
-
   return (
     <form onSubmit={handleSubmit}>
       <div>

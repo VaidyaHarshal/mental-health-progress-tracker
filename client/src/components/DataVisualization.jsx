@@ -40,7 +40,7 @@ const DataVisualization = () => {
   useEffect(() => {
     if (user) {
       axios
-        .get(`http://localhost:5000/api/logs?uid=${user.uid}`)
+        .get(`http://localhost:5000/api/logs?uid=${user.uid}&view=${view}`)
         .then((response) => {
           const logs = response.data;
           const chartData = formatChartData(logs);

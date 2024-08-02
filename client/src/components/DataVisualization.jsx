@@ -10,15 +10,15 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
+import axios from "axios";
 import { useUser } from "../contexts/userContext";
-import { useData } from "../contexts/dataContext";
 
 // Register Chart.js components
 ChartJS.register(
-  CategoryScale,
-  LinearScale,
+  CategoryScale, // for x-axis
+  LinearScale, // for y-axis
   LineElement,
-  PointElement,
+  PointElement, // for plotting points
   Title,
   Tooltip,
   Legend
@@ -26,7 +26,6 @@ ChartJS.register(
 
 const DataVisualization = () => {
   const { user } = useUser();
-  const { logs } = useData();
   const [data, setData] = useState({});
   const [parameters, setParameters] = useState({
     mood: true,
@@ -36,13 +35,22 @@ const DataVisualization = () => {
     interactions: false,
     symptoms: false,
   });
-  const [view, setView] = useState("weekly");
+  const [view, setView] = useState("weekly"); // or "monthly"
 
   useEffect(() => {
-    const chartData = formatChartData(logs);
-    console.log("chartData is", chartData);
-    setData(chartData);
-  }, [logs, parameters, view]);
+    if (user) {
+      axios
+        .get(`http://localhost:5000/api/logs?uid=${user.uid}`)
+        .then((response) => {
+          const logs = response.data;
+          const chartData = formatChartData(logs);
+          setData(chartData);
+        })
+        .catch((error) => {
+          console.error("Error fetching logs", error);
+        });
+    }
+  }, [user, parameters, view]);
 
   const formatChartData = (logs) => {
     const selectedParameters = Object.keys(parameters).filter(
@@ -66,23 +74,22 @@ const DataVisualization = () => {
 
   const groupLogsByTime = (logs, view) => {
     const grouped = {};
-
     logs.forEach((log) => {
       const timePeriod =
         view === "weekly" ? getWeekOfYear(log.date) : getMonthYear(log.date);
-
       if (!grouped[timePeriod]) {
-        grouped[timePeriod] = { timePeriod };
+        grouped[timePeriod] = { timePeriod, counts: {}, totals: {} };
         Object.keys(parameters).forEach((param) => {
           if (parameters[param]) {
-            grouped[timePeriod][param] = [];
+            grouped[timePeriod].counts[param] = 0;
+            grouped[timePeriod].totals[param] = 0;
           }
         });
       }
-
       Object.keys(parameters).forEach((param) => {
         if (parameters[param]) {
-          grouped[timePeriod][param].push(log[param]);
+          grouped[timePeriod].totals[param] += log[param];
+          grouped[timePeriod].counts[param] += 1;
         }
       });
     });
@@ -92,10 +99,9 @@ const DataVisualization = () => {
       const result = { timePeriod: group.timePeriod };
       Object.keys(parameters).forEach((param) => {
         if (parameters[param]) {
-          const values = group[param];
           result[param] =
-            values.length > 0
-              ? values.reduce((acc, value) => acc + value, 0) / values.length
+            group.counts[param] > 0
+              ? group.totals[param] / group.counts[param]
               : 0;
         }
       });
@@ -106,8 +112,7 @@ const DataVisualization = () => {
   const getWeekOfYear = (date) => {
     const dt = new Date(date);
     const start = new Date(dt.getFullYear(), 0, 1);
-    const days = Math.floor((dt - start) / (24 * 60 * 60 * 1000));
-    const week = Math.ceil((days + start.getDay() + 1) / 7);
+    const week = Math.ceil(((dt - start) / 86400000 + 1) / 7);
     return `Week ${week} ${dt.getFullYear()}`;
   };
 

@@ -1,21 +1,15 @@
 const express = require("express");
-const http = require("http");
-const socketIo = require("socket.io");
-const app = express();
-const server = http.createServer(app);
-const io = socketIo(server);
+const bodyParser = require("body-parser");
 const cors = require("cors");
+const logRoutes = require("./routes/logRoutes");
 
-// Middleware setup
+const app = express();
 app.use(cors());
-app.use(express.json()); // Ensure this is added
+app.use(bodyParser.json());
 
-app.post("/api/log", (req, res) => {
-  const newLog = req.body; // Should contain the request body
-  console.log("New log", newLog); // Print the log object
-  io.emit("logUpdate", newLog); // Emit the new log to all connected clients
-  res.status(200).send(newLog);
+app.use("/api", logRoutes);
+
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });
-
-// Start server
-server.listen(5000, () => console.log("Server running on port 5000"));

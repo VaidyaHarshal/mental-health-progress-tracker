@@ -1,27 +1,24 @@
 import React, { useEffect, useState } from "react";
 import { auth } from "../utils/firebaseConfig";
-import {
-  GoogleAuthProvider,
-  signInWithPopup,
-  onAuthStateChanged,
-  signOut,
-} from "firebase/auth";
+import { GoogleAuthProvider, signInWithPopup, signOut } from "firebase/auth";
+// import { useNavigate } from "react-router-dom";
+import { useUser } from "../contexts/userContext";
 
-const Auth = ({ setUser }) => {
+const Auth = () => {
   const [isSignedIn, setIsSignedIn] = useState(false);
+  const { user, setUser } = useUser();
+  // const navigate = useNavigate();
 
   useEffect(() => {
-    const unregisterAuthObserver = onAuthStateChanged(auth, (user) => {
-      setIsSignedIn(!!user);
-      setUser(user);
-    });
-    return () => unregisterAuthObserver();
-  }, [setUser]);
+    setIsSignedIn(!!user);
+  }, [user]);
 
-  const signInWithGoogle = async () => {
+  const signInWithGoogle = () => {
     const provider = new GoogleAuthProvider();
-    const { user } = await signInWithPopup(auth, provider);
-    console.log(user);
+    signInWithPopup(auth, provider).then((result) => {
+      setUser(result.user);
+    });
+    // navigate("/dailyform");
   };
 
   return (

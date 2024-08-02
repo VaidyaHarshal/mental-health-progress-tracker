@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { useData } from "../contexts/dataContext"; // Adjust import based on your file structure
 
 const DailyLogForm = ({ user }) => {
   const [form, setForm] = useState({
@@ -11,19 +12,43 @@ const DailyLogForm = ({ user }) => {
     symptoms: "",
   });
 
+  // Access the context to update logs
+  const { setLogs } = useData();
+
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(form);
-    console.log(user.uid);
+    console.log("Form data is", form);
 
+    // Send a POST request to submit the form data
     axios
-      .post("http://localhost:5000/api/log", { ...form, uid: user.uid })
+      .post(
+        "http://localhost:5000/api/log",
+        { ...form, uid: user.uid },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      )
       .then((response) => {
         console.log("Log submitted", response);
+
+        // Update the context with the new log data
+        setLogs((prevLogs) => [...prevLogs, response.data]);
+
+        // Clear form fields after submission
+        setForm({
+          mood: "",
+          anxiety: "",
+          sleep: "",
+          activity: "",
+          interactions: "",
+          symptoms: "",
+        });
       })
       .catch((error) => {
         console.error("Error submitting log", error);

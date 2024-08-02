@@ -1,21 +1,32 @@
 const express = require("express");
 const http = require("http");
 const socketIo = require("socket.io");
+const cors = require("cors");
 const app = express();
 const server = http.createServer(app);
-const io = socketIo(server);
-const cors = require("cors");
+const io = socketIo(server, {
+  cors: {
+    origin: "http://localhost:5173", // Adjust this to your frontend's URL
+    methods: ["GET", "POST"],
+  },
+});
 const logRoutes = require("./routes/logRoutes");
 
-// Middleware setup
-app.use(cors());
-app.use(express.json()); // Ensure this is added
+// Setup middleware and routes
+app.use(
+  cors({
+    origin: "http://localhost:5173", // Adjust this to your frontend's URL
+    methods: ["GET", "POST"],
+    allowedHeaders: ["Content-Type"],
+  })
+);
 
+app.use(express.json()); // For parsing application/json
 app.use("/api", logRoutes);
 
 app.post("/api/log", (req, res) => {
-  const newLog = req.body; // Should contain the request body
-  console.log("New log", newLog); // Print the log object
+  // Handle log submission...
+  const newLog = req.body; // Example log object
   io.emit("logUpdate", newLog); // Emit the new log to all connected clients
   res.status(200).send(newLog);
 });

@@ -5,4 +5,4 @@ const api = axios.create({
 });
 
 export const createLog = (logData) => api.post("/log", logData);
-export const getLogs = (uid) => api.get(`/logs?uid=${uid}`);
+export const getLogs = (uid, view) => api.get(`/logs?uid=${uid}&view=${view}`);

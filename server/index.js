@@ -24,8 +24,16 @@ app.use(
 app.use(express.json()); // For parsing application/json
 app.use("/api", logRoutes);
 
+// Handle WebSocket connections
+io.on("connection", (socket) => {
+  console.log("New client connected");
+
+  socket.on("disconnect", () => {
+    console.log("Client disconnected");
+  });
+});
+
 app.post("/api/log", (req, res) => {
-  // Handle log submission...
   const newLog = req.body; // Example log object
   io.emit("logUpdate", newLog); // Emit the new log to all connected clients
   res.status(200).send(newLog);
@@ -33,3 +41,5 @@ app.post("/api/log", (req, res) => {
 
 // Start server
 server.listen(5000, () => console.log("Server running on port 5000"));
+
+module.exports = { io }; // Export io for use in other files

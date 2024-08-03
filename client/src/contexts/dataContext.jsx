@@ -1,11 +1,22 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useState, useEffect } from "react";
+import io from "socket.io-client";
 
-// Create a context for data
 const DataContext = createContext();
 
-// Provider component to wrap around the components that need access to the context
 export const DataProvider = ({ children }) => {
   const [logs, setLogs] = useState([]);
+
+  useEffect(() => {
+    const socket = io("http://localhost:5000");
+
+    socket.on("logUpdate", (newLog) => {
+      setLogs((prevLogs) => [...prevLogs, newLog]);
+    });
+
+    return () => {
+      socket.disconnect();
+    };
+  }, []);
 
   return (
     <DataContext.Provider value={{ logs, setLogs }}>
@@ -14,7 +25,6 @@ export const DataProvider = ({ children }) => {
   );
 };
 
-// Custom hook to use the context
 export const useData = () => {
   const context = useContext(DataContext);
   if (context === undefined) {

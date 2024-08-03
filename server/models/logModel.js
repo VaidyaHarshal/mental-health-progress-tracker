@@ -30,7 +30,6 @@ exports.getLogs = (uid) => {
       if (err) {
         return reject(err);
       }
-      console.log(rows);
       resolve(rows);
     });
   });

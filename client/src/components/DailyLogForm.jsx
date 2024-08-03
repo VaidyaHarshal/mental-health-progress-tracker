@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useData } from "../contexts/dataContext"; // Adjust import based on your file structure
+import { io } from "socket.io-client"; // Import socket.io client
 
 const DailyLogForm = ({ user }) => {
   const [form, setForm] = useState({
@@ -14,6 +15,22 @@ const DailyLogForm = ({ user }) => {
 
   const { setLogs } = useData(); // Access context
 
+  useEffect(() => {
+    // Connect to the socket.io server
+    const socket = io("http://localhost:5000");
+
+    // Listen for log updates
+    socket.on("logUpdate", (newLog) => {
+      console.log("New log received", newLog);
+      setLogs((prevLogs) => [...prevLogs, newLog]);
+    });
+
+    // Cleanup on component unmount
+    return () => {
+      socket.disconnect();
+    };
+  }, [setLogs]);
+
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
@@ -25,8 +42,6 @@ const DailyLogForm = ({ user }) => {
       .post("http://localhost:5000/api/log", { ...form, uid: user.uid })
       .then((response) => {
         console.log("Log submitted", response);
-        // Update context with new logs
-        setLogs((prevLogs) => [...prevLogs, response.data]);
         // Clear form fields
         setForm({
           mood: "",

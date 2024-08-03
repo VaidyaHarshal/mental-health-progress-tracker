@@ -4,8 +4,9 @@ const { io } = require("../io");
 exports.createLog = async (req, res) => {
   try {
     const log = await logService.createLog(req.body);
+    console.log("Inside createLog");
     io.emit("logUpdate", log); // Emit the new log to all connected clients
-    res.status(201).json(log);
+    res.status(200).json(log);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

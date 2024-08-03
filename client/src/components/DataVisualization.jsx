@@ -12,6 +12,7 @@ import {
 } from "chart.js";
 import axios from "axios";
 import { useUser } from "../contexts/userContext";
+import { io } from "socket.io-client"; // Import socket.io-client
 
 // Register Chart.js components
 ChartJS.register(
@@ -39,18 +40,33 @@ const DataVisualization = () => {
 
   useEffect(() => {
     if (user) {
-      axios
-        .get(`http://localhost:5000/api/logs?uid=${user.uid}`)
-        .then((response) => {
-          const logs = response.data;
-          const chartData = formatChartData(logs);
-          setData(chartData);
-        })
-        .catch((error) => {
-          console.error("Error fetching logs", error);
-        });
+      fetchLogs();
+      const socket = io("http://localhost:5000"); // Connect to the Socket.IO server
+
+      socket.on("logUpdate", (newLog) => {
+        console.log("New log received", newLog);
+        // Fetch the updated logs and update the chart data
+        fetchLogs();
+      });
+
+      return () => {
+        socket.disconnect();
+      };
     }
   }, [user, parameters, view]);
+
+  const fetchLogs = () => {
+    axios
+      .get(`http://localhost:5000/api/logs?uid=${user.uid}`)
+      .then((response) => {
+        const logs = response.data;
+        const chartData = formatChartData(logs);
+        setData(chartData);
+      })
+      .catch((error) => {
+        console.error("Error fetching logs", error);
+      });
+  };
 
   const formatChartData = (logs) => {
     const selectedParameters = Object.keys(parameters).filter(

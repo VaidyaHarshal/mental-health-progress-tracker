@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { auth } from "../utils/firebaseConfig";
 import { GoogleAuthProvider, signInWithPopup, signOut } from "firebase/auth";
-// import { useNavigate } from "react-router-dom";
 import { useUser } from "../contexts/userContext";
 
 const Auth = () => {
@@ -21,7 +20,6 @@ const Auth = () => {
     signInWithPopup(auth, provider).then((result) => {
       setUser(result.user);
     });
-    // navigate("/dailyform");
   };
 
   return (

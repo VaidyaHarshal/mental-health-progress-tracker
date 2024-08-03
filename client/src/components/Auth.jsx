@@ -50,19 +50,6 @@ const Auth = () => {
       });
   };
 
-  // const handleSignOut = () => {
-  //   setLoading(true);
-  //   signOut(auth)
-  //     .then(() => {
-  //       setUser(null);
-  //       setLoading(false);
-  //     })
-  //     .catch((error) => {
-  //       console.error("Error signing out: ", error);
-  //       setLoading(false);
-  //     });
-  // };
-
   return (
     <AuthBox>
       {isSignedIn ? (
@@ -70,14 +57,6 @@ const Auth = () => {
           <Typography variant="h6">
             Hello, {user ? user.displayName : "User"}
           </Typography>
-          {/* <AuthButton
-            variant="contained"
-            color="secondary"
-            onClick={handleSignOut}
-            disabled={loading}
-          >
-            {loading ? <CircularProgress size={24} /> : "Sign out"}
-          </AuthButton> */}
         </>
       ) : (
         <AuthButton

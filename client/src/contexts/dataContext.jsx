@@ -9,7 +9,6 @@ export const DataProvider = ({ children }) => {
   useEffect(() => {
     const socket = io("http://localhost:5000");
 
-    // Handle incoming log updates
     const handleLogUpdate = (newLog) => {
       setLogs((prevLogs) => [...prevLogs, newLog]);
     };

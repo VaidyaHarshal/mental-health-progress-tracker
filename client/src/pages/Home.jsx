@@ -8,8 +8,7 @@ import {
   Typography,
   Box,
   Paper,
-  AppBar,
-  Toolbar,
+  CircularProgress,
 } from "@mui/material";
 import { styled } from "@mui/system";
 import HeaderComponent from "../components/Layout/HeaderComponent";
@@ -22,13 +21,17 @@ const Header = styled(Box)({
   textAlign: "center",
   padding: "80px 20px",
   borderBottom: "5px solid #fff",
-  minHeight: "300px", // Ensure enough height for visibility
+  minHeight: "300px",
 });
 
-const MainContent = styled(Container)({
+const MainContent = styled(Container)(({ loading }) => ({
   marginTop: "20px",
-  paddingBottom: "80px",
-});
+  paddingBottom: "120px",
+  display: loading ? "flex" : "block",
+  justifyContent: loading ? "center" : "flex-start",
+  alignItems: loading ? "center" : "flex-start",
+  minHeight: loading ? "80vh" : "auto",
+}));
 
 const Footer = styled(Box)({
   textAlign: "center",
@@ -39,23 +42,34 @@ const Footer = styled(Box)({
   width: "100%",
   bottom: "0",
   left: "0",
+  zIndex: 1300,
+  background: "#1976d2",
 });
 
 const Home = () => {
-  const { user } = useUser();
+  const { user, loading } = useUser();
 
   return (
     <div>
       <HeaderComponent />
-      <MainContent maxWidth="lg">
-        <Auth />
-        {user && (
-          <Paper elevation={3} style={{ padding: "20px", marginTop: "20px" }}>
-            <div>
-              <DailyLogForm user={user} />
-              <DataVisualization user={user} />
-            </div>
-          </Paper>
+      <MainContent maxWidth="lg" loading={loading}>
+        {loading ? (
+          <CircularProgress />
+        ) : (
+          <>
+            <Auth />
+            {user && (
+              <Paper
+                elevation={3}
+                style={{ padding: "20px", marginTop: "20px" }}
+              >
+                <div>
+                  <DailyLogForm user={user} />
+                  <DataVisualization user={user} />
+                </div>
+              </Paper>
+            )}
+          </>
         )}
       </MainContent>
       <Footer>

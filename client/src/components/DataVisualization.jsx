@@ -26,7 +26,7 @@ import {
 } from "@mui/material";
 import { styled } from "@mui/system";
 
-// Register Chart.js components
+// ChartJS components
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -49,7 +49,7 @@ const HorizontalFormGroup = styled(FormGroup)({
 const ChartContainer = styled("div")({
   position: "relative",
   width: "100%",
-  height: "500px", // Set a fixed height
+  height: "500px",
 });
 
 const DataVisualization = () => {
@@ -202,7 +202,6 @@ const DataVisualization = () => {
     plugins: {
       legend: {
         onClick: (e, legendItem, legend) => {
-          // Prevent default behavior for legend clicks
           e.stopPropagation();
         },
       },

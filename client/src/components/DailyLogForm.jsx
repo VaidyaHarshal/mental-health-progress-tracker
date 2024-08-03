@@ -9,6 +9,7 @@ import {
   Typography,
   Container,
   Paper,
+  Tooltip,
 } from "@mui/material";
 import { styled } from "@mui/system";
 
@@ -20,6 +21,18 @@ const INITIAL_FORM_STATE = {
   activity: "",
   interactions: "",
   symptoms: "",
+};
+
+const TOOLTIP_TEXT = {
+  mood: "Rate your overall mood from 1 (very bad) to 5 (very good)",
+  anxiety: "Rate your anxiety level from 1 (very low) to 5 (very high)",
+  sleep: "Rate your sleep quality from 1 (very poor) to 5 (very good)",
+  activity:
+    "Rate your physical activity level from 1 (very low) to 5 (very high)",
+  interactions:
+    "Rate the quality of your social interactions from 1 (very poor) to 5 (very good)",
+  symptoms:
+    "Rate the severity of your symptoms from 1 (very mild) to 5 (very severe)",
 };
 
 const StyledPaper = styled(Paper)({
@@ -106,23 +119,33 @@ const DailyLogForm = ({ user }) => {
     <Container>
       <StyledPaper>
         <Typography variant="h5" gutterBottom>
-          Daily Log
+          Daily Log Form
         </Typography>
         <form onSubmit={handleSubmit}>
           <Grid container spacing={2}>
             {Object.keys(INITIAL_FORM_STATE).map((field) => (
               <Grid item xs={12} key={field}>
-                <StyledTextField
-                  fullWidth
-                  type="number"
-                  name={field}
-                  label={capitalizeFirstLetter(field)}
-                  value={form[field]}
-                  onChange={handleChange}
-                  inputProps={{ min: 1, max: 5 }}
-                  error={!!errors[field]}
-                  helperText={errors[field]}
-                />
+                <Tooltip
+                  title={
+                    <span style={{ whiteSpace: "pre-line" }}>
+                      {TOOLTIP_TEXT[field]}
+                    </span>
+                  }
+                  arrow
+                  placement="right"
+                >
+                  <StyledTextField
+                    fullWidth
+                    type="number"
+                    name={field}
+                    label={capitalizeFirstLetter(field)}
+                    value={form[field]}
+                    onChange={handleChange}
+                    inputProps={{ min: 1, max: 5 }}
+                    error={!!errors[field]}
+                    helperText={errors[field]}
+                  />
+                </Tooltip>
               </Grid>
             ))}
           </Grid>

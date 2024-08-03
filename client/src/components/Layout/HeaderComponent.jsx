@@ -17,7 +17,7 @@ const HeaderContainer = styled(Box)({
 });
 
 const AuthButton = styled(Button)({
-  marginLeft: "auto", // Push the button to the far right
+  marginLeft: "auto",
   color: "white",
 });
 

@@ -1,6 +1,6 @@
 import React from "react";
 import { Navigate } from "react-router-dom";
-import { useUser } from "../contexts/userContext"; // Adjust the import path as needed
+import { useUser } from "../contexts/userContext";
 
 const ProtectedRoute = ({ element }) => {
   const { user } = useUser();

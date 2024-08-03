@@ -30,20 +30,16 @@ provider.setCustomParameters({
 export const signInWithGooglePopup = async () => {
   try {
     const result = await signInWithPopup(auth, provider);
-    // Handle successful authentication here
-    console.log("result is", result);
     return result;
   } catch (error) {
     console.log("Error is", error);
     if (error.code === "auth/popup-closed-by-user") {
-      // User closed the popup; show a message or handle it differently
       alert("You closed the sign-in popup. Please try signing in again.");
     } else {
-      // Handle other errors
       console.error("Error during sign-in:", error);
       alert("An error occurred during sign-in. Please try again.");
     }
-    throw error; // Re-throw error if needed
+    throw error;
   }
 };
 

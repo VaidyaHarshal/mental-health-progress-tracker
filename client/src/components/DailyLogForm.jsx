@@ -21,7 +21,6 @@ const DailyLogForm = ({ user }) => {
 
     // Listen for log updates
     socket.on("logUpdate", (newLog) => {
-      console.log("New log received", newLog);
       setLogs((prevLogs) => [...prevLogs, newLog]);
     });
 
@@ -41,7 +40,6 @@ const DailyLogForm = ({ user }) => {
     axios
       .post("http://localhost:5000/api/log", { ...form, uid: user.uid })
       .then((response) => {
-        console.log("Log submitted", response);
         // Clear form fields
         setForm({
           mood: "",

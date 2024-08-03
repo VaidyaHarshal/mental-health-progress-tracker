@@ -44,7 +44,6 @@ const DataVisualization = () => {
       const socket = io("http://localhost:5000"); // Connect to the Socket.IO server
 
       socket.on("logUpdate", (newLog) => {
-        console.log("New log received", newLog);
         // Fetch the updated logs and update the chart data
         fetchLogs();
       });

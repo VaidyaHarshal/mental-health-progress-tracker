@@ -1,16 +1,20 @@
+require("dotenv").config();
+
 const express = require("express");
 const http = require("http");
-const socketIo = require("socket.io");
 const cors = require("cors");
-const logRoutes = require("./routes/logRoutes");
 const { io } = require("./io");
+const logRoutes = require("./routes/logRoutes");
 
 const app = express();
 const server = http.createServer(app);
 
+const PORT = process.env.VITE_PORT || 5000;
+const CLIENT_ORIGIN = process.env.VITE_CLIENT_ORIGIN || "http://localhost:5173";
+
 io.attach(server, {
   cors: {
-    origin: "http://localhost:5173",
+    origin: CLIENT_ORIGIN,
     methods: ["GET", "POST"],
   },
 });
@@ -18,7 +22,7 @@ io.attach(server, {
 // Middleware setup
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: CLIENT_ORIGIN,
     methods: ["GET", "POST"],
     allowedHeaders: ["Content-Type"],
   })
@@ -38,6 +42,6 @@ io.on("connection", (socket) => {
 });
 
 // Start server
-server.listen(5000, () => console.log("Server running on port 5000"));
+server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 
 module.exports = { io };

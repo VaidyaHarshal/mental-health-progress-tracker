@@ -1,5 +1,5 @@
 const logService = require("../services/logService");
-const { io } = require("../index"); // Import io
+const { io } = require("../io");
 
 exports.createLog = async (req, res) => {
   try {

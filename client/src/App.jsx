@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import Header from "./components/Layout/Header";
+// import Header from "./components/Layout/Header";
 import Home from "./pages/Home";
 import Dashboard from "./pages/Dashboard";
 import DailyLogForm from "./components/DailyLogForm";
@@ -14,7 +14,7 @@ const App = () => {
     <DataProvider>
       <UserProvider>
         <Router>
-          <Header />
+          {/* <Header /> */}
           <Routes>
             <Route path="/" element={<Home />} />
             <Route

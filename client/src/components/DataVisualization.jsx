@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { Line } from "react-chartjs-2";
 import {
   Chart as ChartJS,
@@ -12,18 +12,45 @@ import {
 } from "chart.js";
 import axios from "axios";
 import { useUser } from "../contexts/userContext";
-import { io } from "socket.io-client"; // Import socket.io-client
+import { io } from "socket.io-client";
+import {
+  Container,
+  Typography,
+  Button,
+  FormControl,
+  FormGroup,
+  FormControlLabel,
+  Checkbox,
+  CircularProgress,
+  Paper,
+} from "@mui/material";
+import { styled } from "@mui/system";
 
 // Register Chart.js components
 ChartJS.register(
-  CategoryScale, // for x-axis
-  LinearScale, // for y-axis
+  CategoryScale,
+  LinearScale,
   LineElement,
-  PointElement, // for plotting points
+  PointElement,
   Title,
   Tooltip,
   Legend
 );
+
+// Styled FormGroup for horizontal layout
+const HorizontalFormGroup = styled(FormGroup)({
+  display: "flex",
+  flexDirection: "row",
+  gap: "16px",
+  flexWrap: "wrap",
+});
+
+// Container for the chart to maintain size consistency
+const ChartContainer = styled("div")({
+  position: "relative",
+  width: "100%",
+  height: "500px", // Set a fixed height
+});
 
 const DataVisualization = () => {
   const { user } = useUser();
@@ -36,25 +63,11 @@ const DataVisualization = () => {
     interactions: false,
     symptoms: false,
   });
-  const [view, setView] = useState("weekly"); // or "monthly"
+  const [view, setView] = useState("weekly");
 
-  useEffect(() => {
-    if (user) {
-      fetchLogs();
-      const socket = io("http://localhost:5000"); // Connect to the Socket.IO server
+  const fetchLogs = useCallback(() => {
+    if (!user) return;
 
-      socket.on("logUpdate", (newLog) => {
-        // Fetch the updated logs and update the chart data
-        fetchLogs();
-      });
-
-      return () => {
-        socket.disconnect();
-      };
-    }
-  }, [user, parameters, view]);
-
-  const fetchLogs = () => {
     axios
       .get(`http://localhost:5000/api/logs?uid=${user.uid}`)
       .then((response) => {
@@ -65,7 +78,20 @@ const DataVisualization = () => {
       .catch((error) => {
         console.error("Error fetching logs", error);
       });
-  };
+  }, [user, parameters, view]);
+
+  useEffect(() => {
+    fetchLogs();
+    const socket = io("http://localhost:5000");
+
+    socket.on("logUpdate", () => {
+      fetchLogs();
+    });
+
+    return () => {
+      socket.disconnect();
+    };
+  }, [fetchLogs]);
 
   const formatChartData = (logs) => {
     const selectedParameters = Object.keys(parameters).filter(
@@ -109,7 +135,6 @@ const DataVisualization = () => {
       });
     });
 
-    // Calculate average for each time period and parameter
     return Object.values(grouped).map((group) => {
       const result = { timePeriod: group.timePeriod };
       Object.keys(parameters).forEach((param) => {
@@ -159,39 +184,86 @@ const DataVisualization = () => {
     const selectedCount = Object.values(parameters).filter(Boolean).length;
 
     if (parameters[param]) {
-      setParameters({ ...parameters, [param]: false });
+      setParameters((prev) => ({ ...prev, [param]: false }));
     } else if (selectedCount < 3) {
-      setParameters({ ...parameters, [param]: true });
+      setParameters((prev) => ({ ...prev, [param]: true }));
     } else {
       alert("You can select a maximum of three parameters.");
     }
   };
 
+  const options = {
+    scales: {
+      y: {
+        min: 0,
+        max: 5,
+      },
+    },
+    plugins: {
+      legend: {
+        onClick: (e, legendItem, legend) => {
+          // Prevent default behavior for legend clicks
+          e.stopPropagation();
+        },
+      },
+    },
+  };
+
   if (!user) {
-    return <p>Please sign in to see your data.</p>;
+    return (
+      <Container>
+        <Typography variant="h6" color="textPrimary">
+          Please sign in to see your data.
+        </Typography>
+      </Container>
+    );
   }
 
   return (
-    <div>
-      <h2>Data Visualization</h2>
-      <div>
-        <button onClick={() => setView("weekly")}>Weekly View</button>
-        <button onClick={() => setView("monthly")}>Monthly View</button>
-      </div>
-      <div>
-        {Object.keys(parameters).map((param) => (
-          <label key={param}>
-            <input
-              type="checkbox"
-              checked={parameters[param]}
-              onChange={() => handleCheckboxChange(param)}
+    <Container>
+      <Typography variant="h4" gutterBottom>
+        Mental Health Insights
+      </Typography>
+      <Paper elevation={3} style={{ padding: "16px", marginBottom: "16px" }}>
+        <Button
+          variant={view === "weekly" ? "contained" : "outlined"}
+          color="primary"
+          onClick={() => setView("weekly")}
+        >
+          Weekly View
+        </Button>
+        <Button
+          variant={view === "monthly" ? "contained" : "outlined"}
+          color="primary"
+          onClick={() => setView("monthly")}
+        >
+          Monthly View
+        </Button>
+      </Paper>
+      <FormControl component="fieldset" style={{ marginBottom: "16px" }}>
+        <HorizontalFormGroup>
+          {Object.keys(parameters).map((param) => (
+            <FormControlLabel
+              key={param}
+              control={
+                <Checkbox
+                  checked={parameters[param]}
+                  onChange={() => handleCheckboxChange(param)}
+                />
+              }
+              label={param.charAt(0).toUpperCase() + param.slice(1)}
             />
-            {param.charAt(0).toUpperCase() + param.slice(1)}
-          </label>
-        ))}
-      </div>
-      {data.labels ? <Line data={data} /> : <p>Loading...</p>}
-    </div>
+          ))}
+        </HorizontalFormGroup>
+      </FormControl>
+      <ChartContainer>
+        {data.labels ? (
+          <Line data={data} options={options} />
+        ) : (
+          <CircularProgress />
+        )}
+      </ChartContainer>
+    </Container>
   );
 };
 

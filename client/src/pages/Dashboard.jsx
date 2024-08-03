@@ -6,7 +6,7 @@ import Auth from "../components/Auth";
 const Dashboard = ({ user }) => {
   return (
     <div>
-      <Auth />
+      {/* <Auth /> */}
       <DailyLogForm user={user} />
       <DataVisualization user={user} />
     </div>

@@ -9,11 +9,15 @@ export const DataProvider = ({ children }) => {
   useEffect(() => {
     const socket = io("http://localhost:5000");
 
-    socket.on("logUpdate", (newLog) => {
+    // Handle incoming log updates
+    const handleLogUpdate = (newLog) => {
       setLogs((prevLogs) => [...prevLogs, newLog]);
-    });
+    };
+
+    socket.on("logUpdate", handleLogUpdate);
 
     return () => {
+      socket.off("logUpdate", handleLogUpdate); // Unsubscribe from the event
       socket.disconnect();
     };
   }, []);

@@ -5,6 +5,7 @@ import DailyLogForm from "../components/DailyLogForm";
 
 const Home = () => {
   const { user } = useUser();
+
   return (
     <div>
       <h2>Welcome to the Mental Health Progress Tracker</h2>

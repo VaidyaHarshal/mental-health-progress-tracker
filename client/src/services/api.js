@@ -4,5 +4,27 @@ const api = axios.create({
   baseURL: "http://localhost:5000/api",
 });
 
-export const createLog = (logData) => api.post("/log", logData);
-export const getLogs = (uid) => api.get(`/logs?uid=${uid}`);
+const ENDPOINTS = {
+  LOG: "/log",
+  LOGS: "/logs",
+};
+
+export const createLog = async (logData) => {
+  try {
+    const response = await api.post(ENDPOINTS.LOG, logData);
+    return response.data;
+  } catch (error) {
+    console.error("Error creating log:", error);
+    throw new Error("Failed to create log. Please try again.");
+  }
+};
+
+export const getLogs = async (uid) => {
+  try {
+    const response = await api.get(`${ENDPOINTS.LOGS}?uid=${uid}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching logs:", error);
+    throw new Error("Failed to fetch logs. Please try again.");
+  }
+};

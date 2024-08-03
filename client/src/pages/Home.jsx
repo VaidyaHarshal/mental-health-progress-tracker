@@ -12,7 +12,7 @@ import {
   Toolbar,
 } from "@mui/material";
 import { styled } from "@mui/system";
-import Dashboard from "./Dashboard";
+import HeaderComponent from "../components/Layout/HeaderComponent";
 
 const Header = styled(Box)({
   backgroundImage: "url(https://source.unsplash.com/1600x900/?nature,water)",
@@ -27,7 +27,7 @@ const Header = styled(Box)({
 
 const MainContent = styled(Container)({
   marginTop: "20px",
-  paddingBottom: "80px", // Space for the footer
+  paddingBottom: "80px",
 });
 
 const Footer = styled(Box)({
@@ -46,19 +46,7 @@ const Home = () => {
 
   return (
     <div>
-      <AppBar position="static" color="primary">
-        <Toolbar>
-          <Typography variant="h6">Mental Health Progress Tracker</Typography>
-        </Toolbar>
-      </AppBar>
-      {/* <Header>
-        <Typography variant="h2" gutterBottom>
-          Welcome to Your Mental Health Journey
-        </Typography>
-        <Typography variant="h5">
-          Track your progress and insights to stay on top of your well-being.
-        </Typography>
-      </Header> */}
+      <HeaderComponent />
       <MainContent maxWidth="lg">
         <Auth />
         {user && (

@@ -4,6 +4,7 @@ import { GoogleAuthProvider, signInWithPopup, signOut } from "firebase/auth";
 import { useUser } from "../contexts/userContext";
 import { Button, Box, Typography, CircularProgress } from "@mui/material";
 import { styled } from "@mui/system";
+import { useNavigate } from "react-router-dom";
 
 const AuthBox = styled(Box)({
   display: "flex",
@@ -22,6 +23,7 @@ const Auth = () => {
   const [isSignedIn, setIsSignedIn] = useState(false);
   const [loading, setLoading] = useState(false);
   const { user, setUser } = useUser();
+  const navigate = useNavigate();
 
   useEffect(() => {
     setIsSignedIn(!!user);
@@ -36,6 +38,7 @@ const Auth = () => {
       .then((result) => {
         setUser(result.user);
         setLoading(false);
+        navigate("/home");
       })
       .catch((error) => {
         if (error.code === "auth/popup-closed-by-user") {
@@ -47,18 +50,18 @@ const Auth = () => {
       });
   };
 
-  const handleSignOut = () => {
-    setLoading(true);
-    signOut(auth)
-      .then(() => {
-        setUser(null);
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.error("Error signing out: ", error);
-        setLoading(false);
-      });
-  };
+  // const handleSignOut = () => {
+  //   setLoading(true);
+  //   signOut(auth)
+  //     .then(() => {
+  //       setUser(null);
+  //       setLoading(false);
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error signing out: ", error);
+  //       setLoading(false);
+  //     });
+  // };
 
   return (
     <AuthBox>

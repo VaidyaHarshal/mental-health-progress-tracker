@@ -21,6 +21,7 @@ A React application for tracking daily mental health metrics. This app allows us
 
 ## Technologies
 
+- **JavaScript:** A versatile, high-level programming language used for building interactive web applications and server-side development.
 - **React:** JavaScript library for building user interfaces.
 - **Material-UI:** React components for faster and easier web development.
 - **Socket.IO:** Real-time, bidirectional, and event-based communication.

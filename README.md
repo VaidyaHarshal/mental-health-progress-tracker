@@ -25,7 +25,10 @@ A React application for tracking daily mental health metrics. This app allows us
 - **Material-UI:** React components for faster and easier web development.
 - **Socket.IO:** Real-time, bidirectional, and event-based communication.
 - **Axios:** Promise-based HTTP client for the browser and Node.js.
+- **Express.js:** Fast, unopinionated, minimalist web framework for Node.js.
 - **Chart.js:** JavaScript library for creating dynamic and interactive charts.
+- **SQLite3:** Lightweight, disk-based database, ideal for small to medium-sized applications.
+- **Firebase:** Platform developed by Google for creating mobile and web applications, used for authentication.
 
 ## Installation
 
@@ -103,16 +106,21 @@ A React application for tracking daily mental health metrics. This app allows us
 
 1. **Sign In:**
 
-   - Users need to sign in to access the application. Implement authentication as per your requirements.
+   - Users need to sign in to access the application. This application uses Google authentication to sign in users.
 
 2. **Submit Daily Logs:**
 
    - Use the Daily Log Form to submit ratings for mood, anxiety, sleep, activity, interactions, and symptoms.
-   - The data is validated to ensure values are between 1 and 5.
+   - The data is validated to ensure values are between 1 and 5 to ensure simplicity and ease of use, making it intuitive for users to understand and utilize.
+   - 1: Very Poor / Very Bad / Very Low / Very Mild
+     2: Poor / Bad / Low / Mild
+     3: Average / Neutral / Moderate
+     4: Good / High / Severe
+     5: Very Good / Very High / Very Severe
 
 3. **View Data:**
 
-   - Navigate to the chart view to see visual representations of your logged data. You can switch between weekly and monthly views.
+   - Scroll down on the home page to the chart view to see visual representations of your logged data. You can switch between weekly and monthly views.
 
 ## API Endpoints
 
@@ -152,7 +160,15 @@ To populate your SQLite3 database with initial data, follow these steps:
    cd server/scripts/seeds
    ```
 
-3. **Run the Seed File:**
+3. **Update Your Google Email:**
+
+Before running the seed file, you need to update your Google email in the seed file. Open the seed file and update the email address at line 25:
+
+```bash
+const emailId = "your-google-email@example.com";
+```
+
+4. **Run the Seed File:**
 
    Go to the directory where the seed file is located and run the seed file.
 
@@ -162,6 +178,6 @@ To populate your SQLite3 database with initial data, follow these steps:
 
 This will execute the SQL commands in seed.sql and populate your SQLite3 database with the initial data.
 
-4. **Verify Data:**
+5. **Verify Data:**
 
 After running the seed file, verify that the data has been correctly inserted into your database. You can do this by using a database browser or running queries directly against your SQLite3 database.

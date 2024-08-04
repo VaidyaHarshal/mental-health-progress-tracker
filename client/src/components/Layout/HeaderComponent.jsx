@@ -47,7 +47,7 @@ const HeaderComponent = () => {
           {user && (
             <AuthButton
               variant="contained"
-              color="secondary"
+              color="error"
               onClick={handleSignOut}
               disabled={loading}
             >

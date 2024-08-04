@@ -135,7 +135,7 @@ const DataVisualization = () => {
       });
     });
 
-    return Object.values(grouped).map((group) => {
+    const groupedLogs = Object.values(grouped).map((group) => {
       const result = { timePeriod: group.timePeriod };
       Object.keys(parameters).forEach((param) => {
         if (parameters[param]) {
@@ -147,12 +147,41 @@ const DataVisualization = () => {
       });
       return result;
     });
+
+    // Sort the grouped logs by time period
+    groupedLogs.sort((a, b) => {
+      if (view === "weekly") {
+        const [weekA, yearA] = a.timePeriod
+          .match(/Week (\d+) (\d+)/)
+          .slice(1)
+          .map(Number);
+        const [weekB, yearB] = b.timePeriod
+          .match(/Week (\d+) (\d+)/)
+          .slice(1)
+          .map(Number);
+        if (yearA !== yearB) return yearA - yearB;
+        return weekA - weekB;
+      } else {
+        const [monthA, yearA] = a.timePeriod.split(" ");
+        const [monthB, yearB] = b.timePeriod.split(" ");
+        const dateA = new Date(`${monthA} 1, ${yearA}`);
+        const dateB = new Date(`${monthB} 1, ${yearB}`);
+        return dateA - dateB;
+      }
+    });
+
+    return groupedLogs;
   };
 
   const getWeekOfYear = (date) => {
     const dt = new Date(date);
     const start = new Date(dt.getFullYear(), 0, 1);
-    const week = Math.ceil(((dt - start) / 86400000 + 1) / 7);
+    const diff =
+      (dt -
+        start +
+        (start.getTimezoneOffset() - dt.getTimezoneOffset()) * 60000) /
+      86400000;
+    const week = Math.ceil((diff + start.getDay() + 1) / 7);
     return `Week ${week} ${dt.getFullYear()}`;
   };
 
@@ -223,7 +252,10 @@ const DataVisualization = () => {
       <Typography variant="h4" gutterBottom>
         Mental Health Insights
       </Typography>
-      <Paper elevation={3} style={{ padding: "16px", marginBottom: "16px" }}>
+      <Paper
+        elevation={3}
+        style={{ padding: "16px", marginBottom: "16px", textAlign: "center" }}
+      >
         <Button
           variant={view === "weekly" ? "contained" : "outlined"}
           color="primary"

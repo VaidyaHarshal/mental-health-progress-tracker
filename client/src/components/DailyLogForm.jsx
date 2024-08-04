@@ -24,15 +24,42 @@ const INITIAL_FORM_STATE = {
 };
 
 const TOOLTIP_TEXT = {
-  mood: "Rate your overall Mood from 1 (Very Bad) to 5 (Very Good)",
-  anxiety: "Rate your Anxiety level from 1 (Very Low) to 5 (Very High)",
-  sleep: "Rate your Sleep quality from 1 (Very Poor) to 5 (Very Good)",
-  activity:
-    "Rate your Physical activity level from 1 (Very Low) to 5 (Very High)",
-  interactions:
-    "Rate the quality of your Social interactions from 1 (Very Poor) to 5 (Very Good)",
-  symptoms:
-    "Rate the severity of your Symptoms from 1 (Very Mild) to 5 (Very Severe)",
+  mood: `Rate your overall Mood:
+  1: Very Bad
+  2: Bad
+  3: Neutral
+  4: Good
+  5: Very Good`,
+  anxiety: `Rate your Anxiety level:
+  1: Very Low
+  2: Low
+  3: Moderate
+  4: High
+  5: Very High`,
+  sleep: `Rate your Sleep quality:
+  1: Very Poor
+  2: Poor
+  3: Average
+  4: Good
+  5: Very Good`,
+  activity: `Rate your Physical activity level:
+  1: Very Low
+  2: Low
+  3: Moderate
+  4: High
+  5: Very High`,
+  interactions: `Rate the quality of your Social interactions:
+  1: Very Poor
+  2: Poor
+  3: Average
+  4: Good
+  5: Very Good`,
+  symptoms: `Rate the severity of your Symptoms:
+  1: Very Mild
+  2: Mild
+  3: Moderate
+  4: Severe
+  5: Very Severe`,
 };
 
 const StyledPaper = styled(Paper)({
@@ -126,13 +153,28 @@ const DailyLogForm = ({ user }) => {
         <Typography variant="h5" gutterBottom>
           Daily Log Form
         </Typography>
+        <Typography variant="body2" color="textSecondary" paragraph>
+          Please rate the following categories on a scale from 1 to 5:
+          <br />
+          <strong>1:</strong> Very Poor / Very Bad / Very Low / Very Mild
+          <br />
+          <strong>2:</strong> Poor / Bad / Low / Mild
+          <br />
+          <strong>3:</strong> Average / Neutral / Moderate
+          <br />
+          <strong>4:</strong> Good / High / Severe
+          <br />
+          <strong>5:</strong> Very Good / Very High / Very Severe
+        </Typography>
         <form onSubmit={handleSubmit}>
           <Grid container spacing={2}>
             {Object.keys(INITIAL_FORM_STATE).map((field) => (
               <Grid item xs={12} key={field}>
                 <Tooltip
                   title={
-                    <span style={{ whiteSpace: "pre-line" }}>
+                    <span
+                      style={{ whiteSpace: "pre-line", fontSize: "0.875rem" }}
+                    >
                       {TOOLTIP_TEXT[field]}
                     </span>
                   }

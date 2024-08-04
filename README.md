@@ -113,10 +113,10 @@ A React application for tracking daily mental health metrics. This app allows us
    - Use the Daily Log Form to submit ratings for mood, anxiety, sleep, activity, interactions, and symptoms.
    - The data is validated to ensure values are between 1 and 5 to ensure simplicity and ease of use, making it intuitive for users to understand and utilize.
    - 1: Very Poor / Very Bad / Very Low / Very Mild
-     2: Poor / Bad / Low / Mild
-     3: Average / Neutral / Moderate
-     4: Good / High / Severe
-     5: Very Good / Very High / Very Severe
+   - 2: Poor / Bad / Low / Mild
+   - 3: Average / Neutral / Moderate
+   - 4: Good / High / Severe
+   - 5: Very Good / Very High / Very Severe
 
 3. **View Data:**
 

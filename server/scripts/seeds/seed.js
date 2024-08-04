@@ -1,6 +1,13 @@
 const path = require("path");
-const dbPath = path.join(__dirname, "../../utils/database.db");
 const sqlite3 = require("sqlite3").verbose();
+const dbPath = path.join(__dirname, "../../utils/database.db");
+
+const fs = require("fs");
+const dbDir = path.dirname(dbPath);
+if (!fs.existsSync(dbDir)) {
+  fs.mkdirSync(dbDir, { recursive: true });
+}
+
 const db = new sqlite3.Database(dbPath, (err) => {
   if (err) {
     console.error("Error opening database:", err.message);
@@ -36,7 +43,7 @@ const seedDatabase = () => {
         CREATE TABLE IF NOT EXISTS logs (
           id INTEGER PRIMARY KEY AUTOINCREMENT,
           uid TEXT NOT NULL,
-          email TEXT NOT NULL
+          email TEXT NOT NULL,
           date TEXT NOT NULL,
           mood INTEGER,
           anxiety INTEGER,

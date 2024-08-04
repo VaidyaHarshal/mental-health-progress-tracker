@@ -73,12 +73,6 @@ const StyledTextField = styled(TextField)({
   marginBottom: "16px",
 });
 
-const ErrorText = styled(Typography)({
-  color: "red",
-  fontSize: "0.875rem",
-  margin: "8px 0",
-});
-
 const DailyLogForm = ({ user }) => {
   const [form, setForm] = useState(INITIAL_FORM_STATE);
   const [errors, setErrors] = useState({});

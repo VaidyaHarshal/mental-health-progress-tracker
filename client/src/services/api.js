@@ -19,9 +19,9 @@ export const createLog = async (logData) => {
   }
 };
 
-export const getLogs = async (uid) => {
+export const getLogs = async (email) => {
   try {
-    const response = await api.get(`${ENDPOINTS.LOGS}?uid=${uid}`);
+    const response = await api.get(`${ENDPOINTS.LOGS}?email=${email}`);
     return response.data;
   } catch (error) {
     console.error("Error fetching logs:", error);

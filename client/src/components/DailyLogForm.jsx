@@ -48,7 +48,7 @@ const TOOLTIP_TEXT = {
   3: Moderate
   4: High
   5: Very High`,
-  interactions: `Rate the quality of your Social interactions:
+  interactions: `Rate the frequency of your Social interactions:
   1: Very Poor
   2: Poor
   3: Average

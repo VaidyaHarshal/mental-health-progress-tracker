@@ -118,7 +118,6 @@ const DailyLogForm = ({ user }) => {
       }
 
       try {
-        console.log(user);
         await axios.post(`${SOCKET_URL}/api/log`, {
           ...form,
           uid: user.uid,

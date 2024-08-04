@@ -13,17 +13,6 @@ import {
 import { styled } from "@mui/system";
 import HeaderComponent from "../components/Layout/HeaderComponent";
 
-const Header = styled(Box)({
-  backgroundImage: "url(https://source.unsplash.com/1600x900/?nature,water)",
-  backgroundSize: "cover",
-  backgroundPosition: "center",
-  color: "white",
-  textAlign: "center",
-  padding: "80px 20px",
-  borderBottom: "5px solid #fff",
-  minHeight: "300px",
-});
-
 const MainContent = styled(Container)(({ theme }) => ({
   marginTop: "20px",
   paddingBottom: "120px",

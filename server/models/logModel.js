@@ -66,7 +66,6 @@ exports.getLogs = (email) => {
         console.error("Error fetching logs:", err.message);
         return reject(new Error("Database error: Unable to fetch logs."));
       }
-      console.log("Fetched rows:", rows); // Log fetched rows for debugging
 
       if (!rows.length) {
         console.warn(`No logs found for email ID: ${email}`);

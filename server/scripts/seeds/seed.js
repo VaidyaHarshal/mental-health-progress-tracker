@@ -19,10 +19,10 @@ const getRandomDate = () => {
   const date = new Date(
     start.getTime() + Math.random() * (end.getTime() - start.getTime())
   );
-  return date.toISOString().split("T")[0]; // Format YYYY-MM-DD
+  return date.toISOString().split("T")[0];
 };
 
-const emailId = "harshal.vaidya300@gmail.com"; // Example user ID, adjust as needed
+const emailId = "harshal.vaidya300@gmail.com";
 
 // Seed database
 const seedDatabase = () => {
@@ -66,7 +66,7 @@ const seedDatabase = () => {
 
       // Insert records
       for (let i = 0; i < numRecords; i++) {
-        const uid = "iIFMIg2UwNdpsEkppELSvpZTfCW2"; // Example user ID, adjust as needed
+        const uid = "iIFMIg2UwNdpsEkppELSvpZTfCW2";
         const email = "harshal.vaidya300@gmail.com";
         const date = getRandomDate();
         const mood = getRandomInt(1, 5);
@@ -97,7 +97,6 @@ const seedDatabase = () => {
         );
       }
 
-      // Finalize statement
       stmt.finalize((err) => {
         if (err) {
           console.error("Error finalizing statement:", err.message);

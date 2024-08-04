@@ -95,6 +95,8 @@ const DailyLogForm = ({ user }) => {
   const handleSubmit = useCallback(
     async (e) => {
       e.preventDefault();
+
+      // Validate inputs
       const newErrors = {};
       let hasError = false;
 
@@ -108,6 +110,15 @@ const DailyLogForm = ({ user }) => {
 
       if (hasError) {
         setErrors(newErrors);
+        return;
+      }
+
+      // Show confirmation dialog if no validation errors
+      const confirmSubmission = window.confirm(
+        "Are you sure you want to submit this log? This action cannot be undone."
+      );
+
+      if (!confirmSubmission) {
         return;
       }
 

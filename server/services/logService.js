@@ -9,9 +9,9 @@ exports.createLog = async (logData) => {
   }
 };
 
-exports.getLogs = async (uid) => {
+exports.getLogs = async (email) => {
   try {
-    return await logModel.getLogs(uid);
+    return await logModel.getLogs(email);
   } catch (error) {
     console.error("Error fetching logs:", error);
     throw new Error("Could not fetch logs. Please try again.");

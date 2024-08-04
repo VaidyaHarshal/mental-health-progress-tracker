@@ -24,13 +24,9 @@ const Header = styled(Box)({
   minHeight: "300px",
 });
 
-const MainContent = styled(Container)(({ loading }) => ({
+const MainContent = styled(Container)(({ theme }) => ({
   marginTop: "20px",
   paddingBottom: "120px",
-  display: loading ? "flex" : "block",
-  justifyContent: loading ? "center" : "flex-start",
-  alignItems: loading ? "center" : "flex-start",
-  minHeight: loading ? "80vh" : "auto",
 }));
 
 const Footer = styled(Box)({
@@ -43,7 +39,6 @@ const Footer = styled(Box)({
   bottom: "0",
   left: "0",
   zIndex: 1300,
-  background: "#1976d2",
 });
 
 const Home = () => {
@@ -52,9 +47,22 @@ const Home = () => {
   return (
     <div>
       <HeaderComponent />
-      <MainContent maxWidth="lg" loading={loading}>
+      <MainContent
+        maxWidth="lg"
+        style={{
+          display: loading ? "flex" : "block",
+          justifyContent: loading ? "center" : "flex-start",
+          alignItems: loading ? "center" : "flex-start",
+          minHeight: loading ? "80vh" : "auto",
+        }}
+      >
         {loading ? (
-          <CircularProgress />
+          <div style={{ textAlign: "center", padding: "20px" }}>
+            <CircularProgress />
+            <Typography variant="body1" style={{ marginTop: "20px" }}>
+              Loading, please wait...
+            </Typography>
+          </div>
         ) : (
           <>
             <Auth />

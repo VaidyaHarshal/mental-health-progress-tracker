@@ -6,6 +6,7 @@ db.serialize(() => {
     CREATE TABLE IF NOT EXISTS logs (
       id INTEGER PRIMARY KEY,
       uid TEXT,
+      email TEXT,
       date TEXT,
       mood INTEGER,
       anxiety INTEGER,
@@ -26,17 +27,27 @@ db.serialize(() => {
 });
 
 exports.createLog = (logData) => {
-  const { uid, mood, anxiety, sleep, activity, interactions, symptoms } =
+  const { uid, email, mood, anxiety, sleep, activity, interactions, symptoms } =
     logData;
   const date = new Date().toISOString();
 
   return new Promise((resolve, reject) => {
     db.run(
       `
-      INSERT INTO logs (uid, date, mood, anxiety, sleep, activity, interactions, symptoms)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+      INSERT INTO logs (uid, email, date, mood, anxiety, sleep, activity, interactions, symptoms)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
       `,
-      [uid, date, mood, anxiety, sleep, activity, interactions, symptoms],
+      [
+        uid,
+        email,
+        date,
+        mood,
+        anxiety,
+        sleep,
+        activity,
+        interactions,
+        symptoms,
+      ],
       function (err) {
         if (err) {
           console.error("Error creating log:", err.message);
@@ -48,15 +59,17 @@ exports.createLog = (logData) => {
   });
 };
 
-exports.getLogs = (uid) => {
+exports.getLogs = (email) => {
   return new Promise((resolve, reject) => {
-    db.all("SELECT * FROM logs WHERE uid = ?", [uid], (err, rows) => {
+    db.all("SELECT * FROM logs WHERE email = ?", [email], (err, rows) => {
       if (err) {
         console.error("Error fetching logs:", err.message);
         return reject(new Error("Database error: Unable to fetch logs."));
       }
+      console.log("Fetched rows:", rows); // Log fetched rows for debugging
+
       if (!rows.length) {
-        console.warn(`No logs found for user ID: ${uid}`);
+        console.warn(`No logs found for email ID: ${email}`);
       }
       resolve(rows);
     });

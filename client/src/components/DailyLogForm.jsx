@@ -24,15 +24,15 @@ const INITIAL_FORM_STATE = {
 };
 
 const TOOLTIP_TEXT = {
-  mood: "Rate your overall mood from 1 (very bad) to 5 (very good)",
-  anxiety: "Rate your anxiety level from 1 (very low) to 5 (very high)",
-  sleep: "Rate your sleep quality from 1 (very poor) to 5 (very good)",
+  mood: "Rate your overall Mood from 1 (Very Bad) to 5 (Very Good)",
+  anxiety: "Rate your Anxiety level from 1 (Very Low) to 5 (Very High)",
+  sleep: "Rate your Sleep quality from 1 (Very Poor) to 5 (Very Good)",
   activity:
-    "Rate your physical activity level from 1 (very low) to 5 (very high)",
+    "Rate your Physical activity level from 1 (Very Low) to 5 (Very High)",
   interactions:
-    "Rate the quality of your social interactions from 1 (very poor) to 5 (very good)",
+    "Rate the quality of your Social interactions from 1 (Very Poor) to 5 (Very Good)",
   symptoms:
-    "Rate the severity of your symptoms from 1 (very mild) to 5 (very severe)",
+    "Rate the severity of your Symptoms from 1 (Very Mild) to 5 (Very Severe)",
 };
 
 const StyledPaper = styled(Paper)({
@@ -91,7 +91,12 @@ const DailyLogForm = ({ user }) => {
       }
 
       try {
-        await axios.post(`${SOCKET_URL}/api/log`, { ...form, uid: user.uid });
+        console.log(user);
+        await axios.post(`${SOCKET_URL}/api/log`, {
+          ...form,
+          uid: user.uid,
+          email: user.email,
+        });
         setForm(INITIAL_FORM_STATE); // Clear form fields
         setErrors({});
       } catch (error) {

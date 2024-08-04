@@ -69,7 +69,7 @@ const DataVisualization = () => {
     if (!user) return;
 
     axios
-      .get(`http://localhost:5000/api/logs?uid=${user.uid}`)
+      .get(`http://localhost:5000/api/logs?email=${user.email}`)
       .then((response) => {
         const logs = response.data;
         const chartData = formatChartData(logs);
